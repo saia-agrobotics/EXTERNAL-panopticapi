@@ -84,12 +84,20 @@ def pq_compute_single_core(proc_id, annotation_set, gt_folder, pred_folder, cate
         idx += 1
 
         pan_gt_path = gt_ann['file_name']
+        # If 'file_name' contains only a file name without path segments
         if not os.path.split(pan_gt_path)[0]:
             pan_gt_path = os.path.join(gt_folder, pan_gt_path)
+        # If 'file_name' is a relative path pointing nowhere from cwd
+        elif not os.path.isabs(pan_gt_path) and not os.path.isfile(pan_gt_path):
+            pan_gt_path = os.path.join(gt_folder, os.path.basename(pan_gt_path))
 
         pan_pred_path = pred_ann['file_name']
+        # If 'file_name' contains only a file name without path segments
         if not os.path.split(pan_pred_path)[0]:
             pan_pred_path = os.path.join(pred_folder, pan_pred_path)
+        # If 'file_name' is a relative path pointing nowhere from cwd
+        elif not os.path.isabs(pan_pred_path) and not os.path.isfile(pan_pred_path):
+            pan_pred_path = os.path.join(gt_folder, os.path.basename(pan_pred_path))
 
         pan_gt = np.array(Image.open(pan_gt_path), dtype=np.uint32)
         pan_gt = rgb2id(pan_gt)
