@@ -70,6 +70,9 @@ class PQStat():
             sq += sq_class
             rq += rq_class
 
+        # Prevent division by zero errors
+        n = max(1, n)
+
         return {'pq': pq / n, 'sq': sq / n, 'rq': rq / n, 'n': n}, per_class_results
 
 
